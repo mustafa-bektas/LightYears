@@ -1,39 +1,47 @@
 #include "framework/Application.h"
-#include <iostream>
+#include "framework/Core.h"
+#include "framework/World.h"
 
 namespace ly
 {
     Application::Application()
         : m_Window(sf::VideoMode({1920u, 1080u}), "Light Years"),
         m_TargetFrameRate{60.f},
-        m_TickClock{}
+        m_TickClock{},
+        currentWorld{nullptr}
     {
     }
 
     void Application::Run()
     {
+        const float targetDeltaTime = 1.f / m_TargetFrameRate;
+        float accumulatedTime = 0.f;
+
         while (m_Window.isOpen())
         {
-            m_TickClock.restart();
-            float accumulatedTime = 0.f;
-            float targetDeltaTime = 1.f / m_TargetFrameRate;
-
+            float frameDeltaTime = m_TickClock.restart().asSeconds();
+            accumulatedTime += frameDeltaTime;
+    
+            // Handle all pending events
             while (const std::optional event = m_Window.pollEvent())
             {
-                if (event -> is<sf::Event::Closed>())
+                if (event->is<sf::Event::Closed>())
                 {
                     m_Window.close();
                 }
             }
-
-            float frameDeltaTime = m_TickClock.restart().asSeconds();
-            accumulatedTime += frameDeltaTime;
-            while (accumulatedTime > targetDeltaTime)
+    
+            // Fixed time step update
+            while (accumulatedTime >= targetDeltaTime)
             {
                 accumulatedTime -= targetDeltaTime;
                 TickInternal(targetDeltaTime);
-                RenderInternal();
             }
+    
+            // Render once per frame
+            RenderInternal();
+
+            //LOG("ticking at framerate: %f", 1.f / frameDeltaTime);
         }
     }
 }
@@ -41,6 +49,12 @@ namespace ly
 void ly::Application::TickInternal(float deltaTime)
 {
     Tick(deltaTime);
+
+    if (currentWorld)
+    {
+        currentWorld -> BeginPlayInternal();
+        currentWorld -> TickInternal(deltaTime);
+    }
 }
 
 void ly::Application::RenderInternal()
@@ -61,5 +75,5 @@ void ly::Application::Render()
 
 void ly::Application::Tick(float deltaTime)
 {
-    std::cout << "ticking at framerate: " << 1.f / deltaTime << std::endl;
+    
 }
