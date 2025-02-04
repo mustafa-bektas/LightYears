@@ -1,23 +1,17 @@
-cmake_minimum_required(VERSION 3.28)
-project(LightYears LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.27.7)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-
-include(FetchContent)
-FetchContent_Declare(SFML
-    GIT_REPOSITORY https://github.com/SFML/SFML.git
-    GIT_TAG 3.0.0
-    GIT_SHALLOW ON
-    EXCLUDE_FROM_ALL
-    SYSTEM)
-FetchContent_MakeAvailable(SFML)
-
-add_executable(LightYears 
-    src/main.cpp
-    include/framework/Application.h
-    src/framework/Application.cpp
+project(LightYears
+	VERSION 1.0.0
+	LANGUAGES C CXX
 )
 
-target_compile_features(LightYears PRIVATE cxx_std_17)
-target_link_libraries(LightYears PRIVATE SFML::Graphics)
-target_include_directories(LightYears PUBLIC include)
+set(CMAKE_CXX_STANDARD          14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS       OFF)
+
+# creates a variable. 
+set(LIGHT_YEARS_ENGINE_TARGET_NAME LightYearsEngine) 
+set(LIGHT_YEARS_GAME_TARGET_NAME LightYearsGame) 
+
+add_subdirectory(LightYearsEngine)
+add_subdirectory(LightYearsGame)
