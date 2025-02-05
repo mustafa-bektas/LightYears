@@ -1,5 +1,6 @@
 #include "gameFramework/GameApplication.h"
 #include "framework/World.h"
+#include "framework/Actor.h"
 
 ly::Application* GetApplication()
 {
@@ -10,7 +11,22 @@ namespace ly
 {
     GameApplication::GameApplication()
     {
-        LoadWorld<World>();
+        std::weak_ptr<World> newWorld = LoadWorld<World>();
+        newWorld.lock()->SpawnActor<Actor>();
+        actorToDestroy = newWorld.lock()->SpawnActor<Actor>();
+        counter = 0;
+    }
+
+    void GameApplication::Tick(float deltaTime)
+    {
+        counter += deltaTime;
+        if (counter > 2.f)
+        {
+            if(!actorToDestroy.expired())
+            {
+                actorToDestroy.lock()->Destroy();
+            }
+        }
     }
     
-} // namespace ly
+}
