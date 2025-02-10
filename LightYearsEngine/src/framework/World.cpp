@@ -64,4 +64,12 @@ namespace ly
     {
         LOG("ticking at fps: %f", 1.f / deltaTime);
     }
+
+    void World::Render(sf::RenderWindow& window)
+    {
+        for (std::shared_ptr<Actor> actor : m_Actors)
+        {
+            actor->Render(window);
+        }
+    }
 }

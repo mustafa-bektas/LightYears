@@ -4,8 +4,9 @@
 
 namespace ly
 {
-    Application::Application()
-        : m_Window(sf::VideoMode({1920u, 1080u}), "Light Years"),
+    Application::Application(unsigned int windowWidth, unsigned int windowHeight,
+                const std::string &title, std::uint32_t style)
+        : m_Window(sf::VideoMode({windowWidth, windowHeight}), title, style),
         m_TargetFrameRate{60.f},
         m_TickClock{},
         currentWorld{nullptr}
@@ -68,9 +69,10 @@ void ly::Application::RenderInternal()
 
 void ly::Application::Render()
 {
-    sf::RectangleShape rect{ sf :: Vector2f{100, 100} };
-    rect.setFillColor(sf::Color::Green);
-    m_Window.draw(rect);
+    if (currentWorld)
+    {
+        currentWorld -> Render(m_Window);
+    }
 }
 
 void ly::Application::Tick(float deltaTime)

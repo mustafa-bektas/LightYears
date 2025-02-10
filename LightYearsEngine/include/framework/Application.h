@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <cstdint>
 
 namespace ly
 {
@@ -7,7 +8,8 @@ namespace ly
     class Application
     {
         public:
-            Application();
+            Application(unsigned int windowWidth, unsigned int windowHeight,
+                const std::string &title, std::uint32_t style); 
             void Run();
 
             template<typename WorldType>
