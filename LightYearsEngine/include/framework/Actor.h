@@ -14,12 +14,10 @@ namespace ly
 
             void BeginPlayInternal();
             virtual void BeginPlay();
+            void TickInternal(float deltaTime);
             virtual void Tick(float deltaTime);
             void SetTexture(const std::string& texturePath);
-            void Render(sf::RenderWindow& window)
-            {
-                window.draw(m_Sprite);
-            }
+            void Render(sf::RenderWindow& window);
 
         private:
             World* m_OwningWorld;

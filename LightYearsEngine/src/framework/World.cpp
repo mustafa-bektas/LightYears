@@ -30,12 +30,7 @@ namespace ly
         }
 
         m_PendingActors.clear();
-
-        /* for (std::shared_ptr<Actor> actor : m_Actors)
-        {
-            actor->Tick(deltaTime);
-        } */
-
+    
        for (auto iter = m_Actors.begin(); iter != m_Actors.end();)
        {
             if (iter->get()->IsPendingDestroy())
@@ -44,7 +39,7 @@ namespace ly
             }
             else
             {
-                iter->get()->Tick(deltaTime);
+                iter->get()->TickInternal(deltaTime);
                 ++iter;
             }
        }
