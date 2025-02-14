@@ -29,6 +29,14 @@ namespace ly {
         LOG("Actor begin play");
     }
 
+    void Actor::TickInternal(float deltaTime)
+    {
+        if(!IsPendingDestroy())
+        {
+            Tick(deltaTime);
+        }
+    }
+
     void Actor::Tick(float deltaTime)
     {
         LOG("Actor ticking");
@@ -46,5 +54,13 @@ namespace ly {
 
         m_Sprite.setTexture(m_Texture);
         m_Sprite.setTextureRect(sf::IntRect{ sf::Vector2i{0, 0}, sf::Vector2i{textureWidth, textureHeight} });
+    }
+
+    void Actor::Render(sf::RenderWindow& window)
+    {
+        if (IsPendingDestroy())
+            return;
+
+        window.draw(m_Sprite);
     }
 }

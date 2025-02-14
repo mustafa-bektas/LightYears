@@ -44,7 +44,7 @@ namespace ly
             }
             else
             {
-                iter->get()->Tick(deltaTime);
+                iter->get()->TickInternal(deltaTime);
                 ++iter;
             }
        }
